@@ -54,7 +54,7 @@ namespace LinkExtractor
         if (spiders.Count >= 4 && spiders[3].IsAlive) catalog.ProcessSpider(spiders[3]);
         if (spiders.Count == 5 && spiders[4].IsAlive) catalog.ProcessSpider(spiders[4]);
 
-        Console.Write("T:{0} P:{1} --> %{2:0.0}\n", catalog.TotalLinks(), catalog.ProcessedLinks(), catalog.ProcessStatus());
+        Console.Write("Tl:{0}\tPl:{1}\t--> %{2:0.0}\n", catalog.TotalLinks(), catalog.ProcessedLinks(), catalog.ProcessStatus());
       }
 
       // Output the results
