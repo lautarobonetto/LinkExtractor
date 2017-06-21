@@ -28,10 +28,11 @@ namespace LinkExtractor
 
       // Mather spider
       var spiderMother = new Spider(websiteRoot);
-      spiderMother.Send(excludeFilter, includeFilter);
+      spiderMother.Send();
 
       // Catalog
       var catalog = new Catalog(websiteRoot);
+      Cleaner.SpiderClean(spiderMother, excludeFilter, includeFilter);
       catalog.ProcessSpider(spiderMother);
 
       // Process all website woth 5 spiders on different threads
@@ -40,19 +41,39 @@ namespace LinkExtractor
         var spiders = SpiderNest.CreateSpiders(catalog, 5);
         Task[] tasks = new Task[5];
 
-        tasks[0] = Task.Factory.StartNew(() => { if (spiders.Count >= 1) spiders[0].Send(excludeFilter, includeFilter); });
-        tasks[1] = Task.Factory.StartNew(() => { if (spiders.Count >= 2) spiders[1].Send(excludeFilter, includeFilter); });
-        tasks[2] = Task.Factory.StartNew(() => { if (spiders.Count >= 3) spiders[2].Send(excludeFilter, includeFilter); });
-        tasks[3] = Task.Factory.StartNew(() => { if (spiders.Count >= 4) spiders[3].Send(excludeFilter, includeFilter); });
-        tasks[4] = Task.Factory.StartNew(() => { if (spiders.Count == 5) spiders[4].Send(excludeFilter, includeFilter); });
+        tasks[0] = Task.Factory.StartNew(() => { if (spiders.Count >= 1) spiders[0].Send(); });
+        tasks[1] = Task.Factory.StartNew(() => { if (spiders.Count >= 2) spiders[1].Send(); });
+        tasks[2] = Task.Factory.StartNew(() => { if (spiders.Count >= 3) spiders[2].Send(); });
+        tasks[3] = Task.Factory.StartNew(() => { if (spiders.Count >= 4) spiders[3].Send(); });
+        tasks[4] = Task.Factory.StartNew(() => { if (spiders.Count == 5) spiders[4].Send(); });
 
         Task.WaitAll(tasks);
 
-        if (spiders.Count >= 1 && spiders[0].IsAlive) catalog.ProcessSpider(spiders[0]);
-        if (spiders.Count >= 2 && spiders[1].IsAlive) catalog.ProcessSpider(spiders[1]);
-        if (spiders.Count >= 3 && spiders[2].IsAlive) catalog.ProcessSpider(spiders[2]);
-        if (spiders.Count >= 4 && spiders[3].IsAlive) catalog.ProcessSpider(spiders[3]);
-        if (spiders.Count == 5 && spiders[4].IsAlive) catalog.ProcessSpider(spiders[4]);
+        if (spiders.Count >= 1 && spiders[0].IsAlive)
+        {
+          Cleaner.SpiderClean(spiders[0], excludeFilter, includeFilter);
+          catalog.ProcessSpider(spiders[0]);
+        }
+        if (spiders.Count >= 2 && spiders[1].IsAlive)
+        {
+          Cleaner.SpiderClean(spiders[1], excludeFilter, includeFilter);
+          catalog.ProcessSpider(spiders[1]);
+        }
+        if (spiders.Count >= 3 && spiders[2].IsAlive)
+        {
+          Cleaner.SpiderClean(spiders[2], excludeFilter, includeFilter);
+          catalog.ProcessSpider(spiders[2]);
+        }
+        if (spiders.Count >= 4 && spiders[3].IsAlive)
+        {
+          Cleaner.SpiderClean(spiders[3], excludeFilter, includeFilter);
+          catalog.ProcessSpider(spiders[3]);
+        }
+        if (spiders.Count == 5 && spiders[4].IsAlive)
+        {
+          Cleaner.SpiderClean(spiders[4], excludeFilter, includeFilter);
+          catalog.ProcessSpider(spiders[4]);
+        }
 
         Console.Write("Tl:{0}\tPl:{1}\t--> %{2:0.0}\n", catalog.TotalLinks(), catalog.ProcessedLinks(), catalog.ProcessStatus());
       }

@@ -45,7 +45,7 @@ namespace LinkExtractor
     /// <summary>
     /// Remove duplocated links
     /// </summary>
-    public void RemoveDuplicateUrls()
+    private void RemoveDuplicateUrls()
     {
       SiteLinks = SiteLinks.GroupBy(url => url.Key)
                            .Select(group => group.First())
