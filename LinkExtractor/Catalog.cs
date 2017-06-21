@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace LinkExtractor
 {
@@ -18,21 +15,28 @@ namespace LinkExtractor
       this.RootUri = root;
     }
 
-    public void ApplyFilter(Regex filter)
-    {
-
-    }
-
+    /// <summary>
+    /// Returns the number of the total of links extracted
+    /// </summary>
+    /// <returns></returns>
     public int TotalLinks()
     {
       return this.SiteLinks.Count;
     }
 
+    /// <summary>
+    /// Returns the number of links already processed
+    /// </summary>
+    /// <returns></returns>
     public int ProcessedLinks()
     {
       return this.SiteLinks.Where(url => url.Value == true).Count();
     }
 
+    /// <summary>
+    /// Returns the percentage of progress of the link extraction
+    /// </summary>
+    /// <returns></returns>
     public decimal ProcessStatus()
     {
       return ((decimal)ProcessedLinks()/TotalLinks())*100;
